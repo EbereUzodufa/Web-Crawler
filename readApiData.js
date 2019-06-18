@@ -27,18 +27,11 @@ const getQuestionFromURL = (url) =>{
         console.log("JSON", resp);
         return resp;
     }
-
-	function obj(resp){
-        // resp = new Object();
-        console.log("Returned Object", resp);
-		return resp;
-    }
     
     //Fetch gets a promis and we can status and co directly without wrapping them in a function because they are functions
     fetch(url)
     .then(status)
     .then(json)
-    .then(obj)
     .catch(function(err){
         console.log(err);
     })
