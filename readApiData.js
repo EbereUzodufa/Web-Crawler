@@ -12,3 +12,34 @@ let questions =[];//Store questions
 const startYear = 2001;
 const endYear = 2013;
 
+const getQuestionFromURL = (url) =>{
+    function status(response){
+        if(response.status >= 200 || response.status < 300){
+            return Promise.resolve(response);
+        }
+        else{
+            return Promise.reject(new Error(response.statusText));
+        }
+    }
+
+    function json(resp){
+        resp = resp.json();
+        console.log("JSON", resp);
+        return resp;
+    }
+
+	function obj(resp){
+        // resp = new Object();
+        console.log("Returned Object", resp);
+		return resp;
+    }
+    
+    //Fetch gets a promis and we can status and co directly without wrapping them in a function because they are functions
+    fetch(url)
+    .then(status)
+    .then(json)
+    .then(obj)
+    .catch(function(err){
+        console.log(err);
+    })
+}
