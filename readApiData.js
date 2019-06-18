@@ -36,3 +36,8 @@ const getQuestionFromURL = (url) =>{
         console.log(err);
     })
 }
+
+const getQuestionsApi = (baseApi, subjectAPi, yearApi) =>{
+    //an example of what the API looks like https://questions.aloc.ng/api/m?subject=chemistry&year=2010
+    return baseApi + "m?subject=" + subjectAPi + "&year=" + yearApi;
+}
