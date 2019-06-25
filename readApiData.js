@@ -1,5 +1,4 @@
 // const fs = require('fs');
-09060409738
 //At this time, i'm practicing with a certain API hence my variable will be restricted to the API format
 
 const baseApi = "https://questions.aloc.ng/api/"; //Basic API URL
@@ -150,7 +149,8 @@ const getQuestions = (resp, subject) =>{
         if (questionSet.length > 0) {
             for (const quest of questionSet) {
                 const question = new Question(quest, subject);
-                confirmQuestion(question);
+                // confirmQuestion(question);
+                questions.push(question);
             }
         } else {
             emptyData();
@@ -159,7 +159,8 @@ const getQuestions = (resp, subject) =>{
         //If object then it's just an object, just one!!!
         // confirmQuestion(questionSet);
         const question = new Question(questionSet, subject);
-        confirmQuestion(question);
+        // confirmQuestion(question);
+        questions.push(question);
     } else{
         emptyData();
     }
