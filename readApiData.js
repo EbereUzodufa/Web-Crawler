@@ -261,7 +261,7 @@ const saveQuestionToJSON = () =>{
     const data = new Object({data:questions})
     let downloadLink = document.createElement("a");
     document.body.appendChild(downloadLink);
-    downloadLink.download = 'questions-export.JSON';
+    downloadLink.download = 'questions-export.json';
     // downloadLink.href = "data:text/plain;base64," + btoa(unescape(encodeURIComponent((
     //     JSON.stringify(questions,null,2) //this helps me add tab/whitespace in JSON
     // ))));
