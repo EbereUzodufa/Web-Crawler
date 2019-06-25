@@ -1,5 +1,5 @@
 // const fs = require('fs');
-
+09060409738
 //At this time, i'm practicing with a certain API hence my variable will be restricted to the API format
 
 const baseApi = "https://questions.aloc.ng/api/"; //Basic API URL
@@ -77,11 +77,11 @@ class Question{
 
 const getQuestionFromURL = (url, subject) =>{
     function status(response){
-        if(response.status >= 200 || response.status < 300){
-            return Promise.resolve(response);
+        if(response.status >= 200 && response.status < 300){
+            return Promise.resolve(response)
         }
         else{
-            return Promise.reject(new Error(response.statusText));
+            return Promise.reject(new Error(response.statusText))
         }
     }
 
@@ -165,24 +165,52 @@ const getQuestions = (resp, subject) =>{
     }
 }
 
-const startApp = () =>{
-    subjects.forEach(subject=>{
-        questions = []; //resets value of question
-
-        for (let i = startYear; i <= endYear; i++){
-            const year = i;
-            const api = createQuestionsURLApi(subject, year);
-            this.subject = subject.toLowerCase();
-            //continue till api has been exhausted
-            do {
-                checker(api, subject);
-            } while (apiExhausted === false);
-
-            //Then save question;
-            // alert('ji');
-            // console.log("all questions in " + subject, questions);
+//Using a generator function
+function* subjectGenerator(){
+    for(let i = 0; i < subjects.length; i++){
+        const subject = subjects[i];
+        let examyear =  startYear; 
+        while (examyear <= endYear) {
+            const api = createQuestionsURLApi(subject, examyear);
+            getQuestionFromURL(api, subject);
+            console.log(subject, api);
+            yield examyear++;
         }
-    });
+    }
+
+    //NB: Generator functions don't work with forEach
+}
+
+const gen = subjectGenerator();
+
+const startApp = () =>{
+    //#region 
+    // subjects.forEach(subject=>{
+    //     questions = []; //resets value of question
+
+    //     for (let i = startYear; i <= endYear; i++){
+    //         const year = i;
+    //         const api = createQuestionsURLApi(subject, year);
+    //         this.subject = subject.toLowerCase();
+    //         //continue till api has been exhausted
+    //         // do {
+    //         //     checker(api, subject);
+    //         // } while (apiExhausted === false);
+
+    //         //I removed checker because we dont need that
+    //         getQuestionFromURL(api, subject);
+
+    //         //Then we go generator mode
+
+    //         //Then save question;
+    //         // alert('ji');
+    //         // console.log("all questions in " + subject, questions);
+    //     }
+    // });
+    //#endregion
+
+    gen.next();
+    setTimeout(startApp, 1000);
 }
 
 const checker = (api, subject) =>{
