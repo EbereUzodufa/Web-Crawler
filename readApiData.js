@@ -265,12 +265,10 @@ const saveQuestionToJSON = () =>{
     // downloadLink.href = "data:text/plain;base64," + btoa(unescape(encodeURIComponent((
     //     JSON.stringify(questions,null,2) //this helps me add tab/whitespace in JSON
     // ))));
-    downloadLink.href = "data:text/plain;base64," + btoa(unescape(encodeURIComponent((
-        // JSON.stringify(data,null,2) //this helps me add tab/whitespace in JSON
-        data
-    ))));
+    const dataBlob = new Blob(JSON.stringify(data, null, 2),{type: 'application/json'});//this helps me add tab/whitespace in JSON
+    downloadLink.href = URL.createObjectURL(dataBlob);
     downloadLink.target = '_blank';
-    // downloadLink.innerHTML = "download questions JSON text";
+    downloadLink.innerHTML = "download questions JSON text";
     downloadLink.click();
 }
 
