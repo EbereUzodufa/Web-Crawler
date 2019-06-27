@@ -7,6 +7,18 @@
     <meta name='viewport' content='width=device-width, initial-scale=1'>
 </head>
 <body>
-    
+    <label for="selectFile">
+        Select JSON File(s)
+        <input type="file" id="selectFile" name="selectFile" accept=".json">
+    </label>
+    <label for="inputSubmit">
+        <input type="submit" click="getJsonFromFiles">
+    </label>
 </body>
+<script src="countDataInApi.js"></script>
+<script>
+    function getJsonFromFiles(){
+        const files = document.getElementById("selectFile");
+    }
+</script>
 </html>
