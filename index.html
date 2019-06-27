@@ -5,20 +5,105 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Web Crawler</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <style>
+        a{
+            width: 100%;
+            color: pink;
+        }
+    </style>
 </head>
 <body>
     <label for="selectFile">
         Select JSON File(s)
-        <input type="file" id="selectFile" name="selectFile" accept=".json">
+        <input type="file" id="selectFile" name="selectFile" accept=".json" multiple>
     </label>
-    <label for="inputSubmit">
-        <input type="submit" click="getJsonFromFiles">
-    </label>
+    <!-- <label for="inputSubmit">
+        <input type="submit" onclick="getJsonFromFiles()">
+    </label> -->
+
+    <button onclick="getJsonFromFiles()" role="button">Submit</button>
+    <div id="download">
+
+    </div>
 </body>
-<script src="countDataInApi.js"></script>
+<!-- <script src="countDataInApi.js"></script> -->
 <script>
+    let questionSet = new Set(); //a set to collect questions
+    const parentPath = 'questions-Copy'; //Parent directory for .json files
+
     function getJsonFromFiles(){
-        const files = document.getElementById("selectFile");
+        
+        const files = document.getElementById("selectFile").files;
+        if(files){
+            console.log("File Length",files.length);
+            //files returns an Object
+            const fileLength = Object.keys(files).length;
+            for (let i = 0; i < fileLength; i++) {
+                const file = files[i];
+                console.log('In this file', file.name);
+                getJsonData(file.name);
+            } 
+            // files.forEach(file => {
+            //     console.log('In this file', file.name);
+            //     getJsonData(file.name);
+            // });
+        }
     }
+
+    const getJsonData = (fileName) =>{
+        // event.preventDefault();
+        const api = parentPath + "/" + fileName;
+        function status(response){
+            if(response.status >= 200 || response.status < 300){
+                return Promise.resolve(response);
+            }
+            else{
+                return Promise.reject(new Error(response.statusText));
+            }
+        }
+
+        function json(resp){
+            resp = resp.json();
+            console.log("JSON", resp);
+            return resp;
+        }
+
+        //Get data as JSON
+        function getData(resp){
+            const jsonData = resp.data;
+            // console.log(fileName, data);
+            jsonData.forEach(item => {
+                questionSet.add(item); //I want just unique items
+            });
+        }
+        
+        //Fetch gets a promis and we can status and co directly without wrapping them in a function because they are functions
+        fetch(api)
+        .then(status)
+        .then(json)
+        .then(getData)
+        .catch(function(err){
+            console.log(err);
+        })
+    }
+
+    //Save the data from Set
+    const saveUniqueData = () =>{
+        //We use [...obj] or Array.from(obj) to convert to Array
+        const data = new Object({data:[...questionSet]});
+        console.log(data);
+
+        const fileSaveName = 'questions-unique.json'; 
+        const fileBlob = new Blob(JSON.stringify(data, null, 2),{type: 'application/json'});
+        
+        let downloadLink = document.createElement("a");
+        const div_download = document.querySelector('div#download');
+        div_download.appendChild(downloadLink);
+        downloadLink.download = fileSaveName;
+        downloadLink.innerHTML = "Download " + fileSaveName;
+        downloadLink.href = URL.createObjectURL(fileBlob);
+        downloadLink.target = '_blank';
+        downloadLink.click();
+    } 
 </script>
 </html>
