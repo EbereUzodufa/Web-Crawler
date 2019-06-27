@@ -258,7 +258,7 @@ const checker = (api, subject) =>{
 
 const saveQuestionToJSON = () =>{
     //saveQuestionToJSON(questions, subjectAPi, yearApi)
-    const data = new Object({data:questions})
+    const data = new Object({data:[...questions]})
     let downloadLink = document.createElement("a");
     document.body.appendChild(downloadLink);
     downloadLink.download = 'questions-export.json';
@@ -266,7 +266,8 @@ const saveQuestionToJSON = () =>{
     //     JSON.stringify(questions,null,2) //this helps me add tab/whitespace in JSON
     // ))));
     downloadLink.href = "data:text/plain;base64," + btoa(unescape(encodeURIComponent((
-        JSON.stringify(data,null,2) //this helps me add tab/whitespace in JSON
+        // JSON.stringify(data,null,2) //this helps me add tab/whitespace in JSON
+        data
     ))));
     downloadLink.target = '_blank';
     // downloadLink.innerHTML = "download questions JSON text";
